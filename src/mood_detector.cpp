@@ -29,7 +29,7 @@ void MoodDetector::update(const float sample)
         baseline_mean += old_sample / static_cast<float>(num_baseline_samples);
 
         // Once the baseline queue also contains enough samples, the detector is initialized.
-        if (baseline_samples.size() == num_baseline_samples)
+        if (baseline_samples.size() >= num_baseline_samples)
         {
             status = Status::initialized;
         }

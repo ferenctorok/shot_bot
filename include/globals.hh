@@ -30,6 +30,6 @@ constexpr uint8_t MAX_TIME_MIN{40U};
 constexpr size_t SAMPLE_LENGTH_MS{500UL};
 
 // Mood detector.
-constexpr uint8_t NUM_BASELINE_SAMPLES{10U};
-constexpr uint8_t NUM_COMPARISON_SAMPLES{4U};
-constexpr float SIGNIFICANT_DIFFERENCE{100.0f};
+constexpr uint8_t NUM_BASELINE_SAMPLES{14U};
+constexpr uint8_t NUM_COMPARISON_SAMPLES{8U};
+constexpr float SIGNIFICANT_DIFFERENCE{0.15f};
