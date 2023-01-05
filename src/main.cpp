@@ -43,12 +43,17 @@ void setup()
   randomSeed(analogRead(RANDOM_SEED_PIN));
 
   // Trying to connect to the Wifi.
-  const auto wifi_success = connect_to_wifi(SSID, WIFI_PASSWORD);
+  const auto wifi_success = connect_to_wifi(WIFI_CREDENTIALS);
 
   // Setting up the gmail manager if the wifi connection was successful.
   if (wifi_success == SuccessCode::success)
   {
+    Serial.println("Wifi connection was successful.");
     gmail_manager.emplace(SENDER_ADDRESS, SENDER_PASSWORD, "Kicsi Bot");
+  }
+  else
+  {
+    Serial.println("Wifi connection was NOT successful.");
   }
 
   // Sleeping until shortly before MIN_TIME_MIN. Before that nothing is going to happen.
@@ -59,19 +64,22 @@ void loop()
 {
   const float sample{noise_sensor.measure_duty_cycle(SAMPLE_LENGTH_MS)};
   mood_detector.update(sample);
+
+  Serial.print("sample: "); Serial.print(sample);
+  Serial.print("detector_status: "); Serial.println(static_cast<int>(mood_detector.get_status()));
   
   const bool mood_drop_sensed{mood_detector.get_status() == MoodDetector::Status::drop_sensed};
   const bool alarm_went_off{timer.has_timer_went_off()};
   
   if (mood_drop_sensed || alarm_went_off)
   {
+    led.turn_on();
+
     // Send an email if possible.
     if (gmail_manager.has_value())
     {
       gmail_manager->send_mail(RECIPIENT_EMAIL, "Reminder", "KICSI?");
     }
-
-    led.turn_on();
 
     // Until the devide is not turned off, the buzzer is going to be beeping.
     while (true)

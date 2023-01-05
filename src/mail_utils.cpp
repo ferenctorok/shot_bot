@@ -5,7 +5,7 @@
 #include <ESP_Mail_Client.h>
 
 
-const SuccessCode connect_to_wifi(
+const SuccessCode connect_to_wifi_single(
     const String ssid, const String password, const float max_wait_time)
 {
     WiFi.begin(ssid, password);
@@ -25,6 +25,7 @@ const SuccessCode connect_to_wifi(
 
     if (WiFi.status() != WL_CONNECTED)
     {
+        WiFi.disconnect();
         return SuccessCode::failure;
     }
 
@@ -34,6 +35,26 @@ const SuccessCode connect_to_wifi(
     Serial.println(WiFi.localIP());
 
     return SuccessCode::success;
+}
+
+const SuccessCode connect_to_wifi(std::vector<WifiCredential> wifi_credentials,
+    const float max_wait_time, const size_t num_tries)
+{
+    SuccessCode success_code{SuccessCode::failure};
+
+    for (size_t i{0UL}; i < num_tries; ++i)
+    {
+        for (const auto& credential : wifi_credentials)
+        {
+            success_code = connect_to_wifi_single(credential.ssid, credential.password, max_wait_time);
+            if (success_code == SuccessCode::success)
+            {
+                return success_code;
+            }
+        }
+    }
+
+    return success_code;
 }
 
 // Initializing the SMTP session.

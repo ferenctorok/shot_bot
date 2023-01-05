@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include <vector>
 
 
 // Pins.
@@ -14,13 +15,24 @@ constexpr uint8_t SENSOR_PIN{D2};
 constexpr uint8_t RANDOM_SEED_PIN(D6);
 
 // Wifi connection.
-const String SSID{"FRITZ!Box 7530 XF"};
-const String WIFI_PASSWORD{"04236449658141056366"};
+struct WifiCredential
+{
+    String ssid;
+    String password;
+};
+
+const std::vector<WifiCredential> WIFI_CREDENTIALS
+{
+    // WifiCredential{"FRITZ!Box 7530 XF", "04236449658141056366"},
+    WifiCredential{"Nagyhaz", "csehtorok61"},
+    WifiCredential{"HUAWEI Mate 20 lite", "1234567890"},
+    
+};
 
 // Email.
 const String SENDER_ADDRESS{"kicsi.bot69@gmail.com"};
 const String SENDER_PASSWORD{"siomkzblyajbhiyn"};
-const String RECIPIENT_EMAIL{"ferike.trk@gmail.com"};
+const String RECIPIENT_EMAIL{"balint.lnd@gmail.com"};
 
 // Timer.
 constexpr uint8_t MIN_TIME_MIN{20U};
